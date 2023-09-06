@@ -4,7 +4,7 @@ import {
   BleClient,
   ScanResult,
 } from '@capacitor-community/bluetooth-le';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab2',
@@ -18,7 +18,7 @@ export class Tab2Page {
   bluetoothConnectedDevice?: ScanResult;
 
 
-  constructor(public toastController: ToastController, public router: Router) {}
+  constructor(public toastController: ToastController, public router: Router, private modalController: ModalController) {}
 
   ngOnInit(): void {}
 

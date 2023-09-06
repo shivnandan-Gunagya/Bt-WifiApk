@@ -15,19 +15,19 @@
             Find nearby <ion-icon name="bluetooth"></ion-icon>  Devices </ion-title>
         </ion-button>
       </ion-card-content>
-    </ion-card>
-
-    <ion-card-content>
-      <ion-list *ngIf="bluetoothScanResults.length >= 0">
-        <ion-item *ngFor="let device of bluetoothScanResults">
-          {{ device.device.name ?? device.device.deviceId }}
-        </ion-item>
-      </ion-list>
+      
+      <ion-card-content>
+        <ion-list *ngIf="bluetoothScanResults.length >= 0">
+          <ion-item *ngFor="let device of bluetoothScanResults">
+            {{ device.device.name ?? device.device.deviceId }}
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
 
       <ion-item class="ion-text-center" *ngFor="let device of bluetoothScanResults">
         <ion-button  color="secondary"> cancel</ion-button>
         <ion-button color="secondary"> Connect</ion-button>
       </ion-item>
-    </ion-card-content>
+    </ion-card> 
   
 </ion-content>
