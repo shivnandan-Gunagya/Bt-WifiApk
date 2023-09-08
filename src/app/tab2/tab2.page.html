@@ -10,24 +10,44 @@
 
     <ion-card class="ion-margin-top">
       <ion-card-content style="display: grid; place-items: center;">
-        <ion-button class="ion-text-center" id="open-modal" expand="block" (click)="scanForBluetoothDevices()" [disabled]="bluetoothIsScanning">
+        <ion-button class="ion-text-center" id="open-modal" expand="block" (click)="scanForBluetoothDevices(); showLoading()" [disabled]="bluetoothIsScanning">
           <ion-title>
             Find nearby <ion-icon name="bluetooth"></ion-icon>  Devices </ion-title>
         </ion-button>
       </ion-card-content>
-      
-      <ion-card-content>
-        <ion-list *ngIf="bluetoothScanResults.length >= 0">
-          <ion-item *ngFor="let device of bluetoothScanResults">
-            {{ device.device.name ?? device.device.deviceId }}
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
+    </ion-card>
 
-      <ion-item class="ion-text-center" *ngFor="let device of bluetoothScanResults">
-        <ion-button  color="secondary"> cancel</ion-button>
-        <ion-button color="secondary"> Connect</ion-button>
-      </ion-item>
-    </ion-card> 
-  
+    <ion-modal #modal trigger="open-modal">
+      <ng-template>
+        <ion-toolbar>
+          <ion-title>Nearby  
+            <ion-icon name="bluetooth"> </ion-icon>
+            device 
+          </ion-title>
+          <ion-buttons slot="end">
+            <ion-button color="light" (click)="modal.dismiss()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-content>
+          
+          <ion-list *ngIf="bluetoothScanResults.length > 0">
+            <ion-radio-group>
+              <ion-item  [id]="device.device.deviceId" value="space-between" *ngFor="let device of bluetoothScanResults" >
+                <ion-label class="ion-padding">
+                  <ion-radio justify="space-between">
+                    <ion-icon name="bluetooth"> </ion-icon>
+                    {{device.device.name || device.device.deviceId }}
+                  </ion-radio>
+                </ion-label>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </ion-content>
+        <ion-item class="ion-text-center">
+          <ion-button  color="secondary" (click)="modal.dismiss()"> cancel</ion-button>
+          <ion-button color="secondary" > Connect</ion-button>
+        </ion-item>
+      </ng-template>
+    </ion-modal>
+
 </ion-content>

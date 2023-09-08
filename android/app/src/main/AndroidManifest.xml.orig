@@ -25,7 +25,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
     <uses-permission android:name="android.print.BLUETOOTH " />
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
-    <uses-permission android:name="android .permission. BLUETOOTH_DEBUG" />
+    <uses-permission android:name="android .permission. BLUETOOTH_DEBUG"/>
 </manifest>
