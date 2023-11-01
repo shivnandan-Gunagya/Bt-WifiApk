@@ -29,8 +29,10 @@
     "@capacitor/keyboard": "5.0.6",
     "@capacitor/status-bar": "5.0.6",
     "@ionic/angular": "^7.0.0",
+    "@jaames/iro": "^5.5.2",
     "cordova-plugin-ble-central": "^1.7.0",
     "ionicons": "^7.0.0",
+    "ngx-color-picker": "^14.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

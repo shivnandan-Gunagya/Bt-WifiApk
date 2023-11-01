@@ -10,7 +10,7 @@
 
     <ion-card class="ion-margin-top">
       <ion-card-content style="display: grid; place-items: center;">
-        <ion-button class="ion-text-center" id="open-modal" expand="block" (click)="scanForBluetoothDevices(); showLoading()" [disabled]="bluetoothIsScanning">
+        <ion-button class="ion-text-center" id="open-modal" expand="block" (click)="scanForBluetoothDevices()" [disabled]="bluetoothIsScanning">
           <ion-title>
             Find nearby <ion-icon name="bluetooth"></ion-icon>  Devices </ion-title>
         </ion-button>
@@ -36,7 +36,7 @@
                 <ion-label class="ion-padding">
                   <ion-radio justify="space-between">
                     <ion-icon name="bluetooth"> </ion-icon>
-                    {{device.device.name || device.device.deviceId }}
+                    {{device.localName || device.device.deviceId }}
                   </ion-radio>
                 </ion-label>
               </ion-item>
@@ -45,7 +45,7 @@
         </ion-content>
         <ion-item class="ion-text-center">
           <ion-button  color="secondary" (click)="modal.dismiss()"> cancel</ion-button>
-          <ion-button color="secondary" > Connect</ion-button>
+          <ion-button color="secondary"> Connect</ion-button>
         </ion-item>
       </ng-template>
     </ion-modal>

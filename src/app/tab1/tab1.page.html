@@ -1,17 +1,24 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-title>rgb-config</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding" style="min-height: 80vh">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title> RGB Configuration </ion-card-title>
+    </ion-card-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <ion-card-content>
+      <ion-row class="ion-margin-top">
+          <ion-col size="6">
+            <div style="width: 50%; height: 50%; border: 1px solid black; background-color: #fff;"></div>
+          </ion-col>
+          <ion-col size="6">
+
+          </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

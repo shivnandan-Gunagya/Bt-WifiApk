@@ -13,7 +13,7 @@ import {
   styleUrls: ['tab2.page.scss'],
 })
 export class Tab2Page {
-  showLoader: boolean = true;
+  loaderToShow: any;
   bluetoothScanResults: ScanResult[] = [];
   bluetoothIsScanning = false;
 
@@ -28,19 +28,21 @@ export class Tab2Page {
 
   ngOnInit(): void {}
 
-  async showLoading() {
-    if (this.bluetoothScanResults.length <= 0) {
-      const loading = await this.loadingCtrl.create({
-        message: 'Finding nearby bluetooth devices',
-        duration: 5000,
+  showLoader(text: any) {
+    this.loaderToShow = this.loadingCtrl
+      .create({
+        message: text,
+      })
+      .then((res) => {
+        res.present();
+        res.onDidDismiss().then((dis) => {
+          console.log('Loading dismissed!');
+        });
       });
+  }
 
-      loading.present();
-
-      if (this.bluetoothScanResults.length > 0) {
-        loading.dismiss();
-      }
-    }
+  hideLoader() {
+    this.loadingCtrl.dismiss();
   }
 
   async scanForBluetoothDevices() {
@@ -50,8 +52,8 @@ export class Tab2Page {
       const isEnable = await BleClient.isEnabled();
 
       if (!isEnable) {
-        const enableRes = await BleClient.enable();
-       
+        const enableRes = this.enableBt();
+
         if (void enableRes) {
           console.log('Enabled');
         } else if (void enableRes != true) {
@@ -59,16 +61,20 @@ export class Tab2Page {
         }
       }
 
+      this.showLoader('Scan Bluetooth Devices');
       this.bluetoothScanResults = [];
       this.bluetoothIsScanning = true;
 
-      await BleClient.requestLEScan({}, (result:any) => {
+      await BleClient.requestLEScan({}, (result: any) => {
         console.log('Received new scan result', result);
-      
+
+        console.log('MData', result);
+
         this.bluetoothScanResults.push(result);
+        this.hideLoader();
       });
 
-      const stopScanAfterMilliSeconds = 10000;
+      const stopScanAfterMilliSeconds = 5000;
       setTimeout(async () => {
         await BleClient.stopLEScan();
         this.bluetoothIsScanning = false;
@@ -78,6 +84,17 @@ export class Tab2Page {
       this.bluetoothIsScanning = false;
       console.error('scanForBluetoothDevices', error);
     }
+  }
+
+  enableBt() {
+    BleClient.enable().then(
+      () => {
+        this.scanForBluetoothDevices();
+      },
+      () => {
+        alert('Allow Bluetooth To Turn On Or Exit The App!');
+      }
+    );
   }
 
   onBluetooDeviceDisconnected(disconnectedDeviceId: string) {
@@ -96,7 +113,7 @@ export class Tab2Page {
   async connectToBluetoothDevice(scanResult: ScanResult) {
     const device = scanResult.device;
 
-    alert(scanResult)
+    alert(scanResult);
 
     try {
       await BleClient.connect(
