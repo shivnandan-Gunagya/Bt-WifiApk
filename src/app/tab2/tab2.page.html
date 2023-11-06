@@ -16,7 +16,28 @@
         </ion-button>
       </ion-card-content>
     </ion-card>
-
+    <ion-list>
+      <ion-list-header class="ion-text-center">
+        Connected Device
+      </ion-list-header>
+      <ion-item-sliding>
+          <ion-item (click)="toggleInputField()" >
+            <ion-label>{{bluetoothConnectedDevice}}</ion-label>
+          </ion-item>
+            <ion-input [(ngModel)]="userInput" #inputField label="Type message to send" label-placement="floating" fill="outline" placeholder="Enter text" *ngIf="inputVisible"></ion-input>
+            <ion-button (click)="writeData()" #sendButton expand="full" *ngIf="inputVisible">Send</ion-button>
+          <ion-item-options side="end">
+            <ion-item-option color="danger">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+      </ion-item-sliding>
+      <ion-item>
+        {{newText}}
+        {{dataView}}
+      </ion-item>
+    </ion-list>
+    
     <ion-modal #modal trigger="open-modal">
       <ng-template>
         <ion-toolbar>
@@ -31,23 +52,24 @@
         <ion-content>
           
           <ion-list *ngIf="bluetoothScanResults.length > 0">
+            <ion-list-header>
+              Click to connect with the device
+            </ion-list-header>
             <ion-radio-group>
               <ion-item  [id]="device.device.deviceId" value="space-between" *ngFor="let device of bluetoothScanResults" >
-                <ion-label class="ion-padding">
-                  <ion-radio justify="space-between">
+                <ion-item  class="ion-padding" (click)="connectToBluetoothDevice(device.device)">
                     <ion-icon name="bluetooth"> </ion-icon>
-                    {{device.localName || device.device.deviceId }}
-                  </ion-radio>
-                </ion-label>
+                   <p>{{device.localName ?? device.device.deviceId }} </p>
+                </ion-item>
               </ion-item>
             </ion-radio-group>
           </ion-list>
         </ion-content>
         <ion-item class="ion-text-center">
           <ion-button  color="secondary" (click)="modal.dismiss()"> cancel</ion-button>
-          <ion-button color="secondary"> Connect</ion-button>
         </ion-item>
       </ng-template>
     </ion-modal>
+
 
 </ion-content>
