@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {
   BleClient,
   dataViewToText,
+  numberToUUID,
   ScanResult,
   textToDataView,
 } from '@capacitor-community/bluetooth-le';
@@ -20,6 +21,8 @@ import {
   styleUrls: ['tab2.page.scss'],
 })
 export class Tab2Page {
+
+  
   @ViewChild('inputField')
   inputField!: IonInput;
   @ViewChild('sendButton')
@@ -27,7 +30,7 @@ export class Tab2Page {
   inputVisible = false;
   newText: any = null;
   dataView: any = null;
-
+  incomingData: any = null;
   userInput: string = '';
   loaderToShow: any;
   bluetoothScanResults: ScanResult[] = [];
@@ -35,7 +38,8 @@ export class Tab2Page {
   bluetoothConnectedDevice?: ScanResult;
   connectedDevice: any = '';
   ESP_SERVICE = '6e400001-b5a3-f393-e0a9-e50e24dcca9e'.toUpperCase();
-  ESP_CHARACTERISTIC_SERVICE = '6e400003-b5a3-f393-e0a9-e50e24dcca9e'.toUpperCase();
+  ESP_RX_CHARACTERISTICS = '6e400002-b5a3-f393-e0a9-e50e24dcca9e'.toUpperCase();
+  ESP_TX_CHARACTERISTICS = '6e400003-b5a3-f393-e0a9-e50e24dcca9e'.toUpperCase();
 
   constructor(
     public toastController: ToastController,
@@ -96,7 +100,7 @@ export class Tab2Page {
         }
       }
 
-      this.showLoader('Scan Bluetooth Devices');
+      // this.showLoader('Scan Bluetooth Devices');
       this.bluetoothScanResults = [];
       this.bluetoothIsScanning = true;
 
@@ -144,15 +148,15 @@ export class Tab2Page {
       await BleClient.connect(scanResult.deviceId);
 
       this.connectedDevice = scanResult;
-      this.readData();
+      // this.readData();
       this.bluetoothConnectedDevice = scanResult.name;
       this.hideLoader();
       if (this.bluetoothConnectedDevice === scanResult.name) {
         alert('connected');
       }
-    } catch (error) {
+    } catch (error: any) {
       this.hideLoader();
-      alert('can not connect with the device');
+      alert(error.message);
       console.error('connectToDevice', error);
       // this.presentToast(JSON.stringify(error));
     }
@@ -162,16 +166,17 @@ export class Tab2Page {
 
   async writeData() {
     this.newText = textToDataView(this.userInput);
-    this.dataView = dataViewToText(this.newText);
+    // this.dataView = dataViewToText(this.newText);
 
     try {
       await BleClient.write(
         this.connectedDevice.deviceId,
         this.ESP_SERVICE,
-        this.ESP_CHARACTERISTIC_SERVICE,
+        this.ESP_RX_CHARACTERISTICS,
         this.newText
       );
-      alert('message sent sucesfully!');
+      alert(`message ${this.userInput} sended`)
+      console.log('Update value');
     } catch (error) {
       alert('can not send the message');
     }
@@ -183,12 +188,16 @@ export class Tab2Page {
     try {
       const esp_characterictic = await BleClient.read(
         this.connectedDevice.deviceId,
+        // '48:77:85:E6:A4:57',
         this.ESP_SERVICE,
-        this.ESP_CHARACTERISTIC_SERVICE
+        this.ESP_TX_CHARACTERISTICS
       );
-      alert(esp_characterictic.getUint8(0));
-    } catch (error) {
-      alert('got an error while reading the data');
+      let result = dataViewToText(esp_characterictic);
+      this.incomingData = result;
+      console.log(' The data is : ' + result);
+      // alert("time" + esp_characterictic);
+    } catch (error: any) {
+      alert(error.message);
     }
   }
 }
